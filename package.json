@@ -22,8 +22,5 @@
   "bugs": {
     "url": "https://github.com/nitinsharmacs/myserver-bodyparser/issues"
   },
-  "homepage": "https://github.com/nitinsharmacs/myserver-bodyparser#readme",
-  "dependencies": {
-    "myserver": "github:nitinsharmacs/myserver"
-  }
+  "homepage": "https://github.com/nitinsharmacs/myserver-bodyparser#readme"
 }
