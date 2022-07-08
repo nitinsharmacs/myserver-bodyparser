@@ -28,8 +28,10 @@ const bodyParser = (req, res, next) => {
 
   const contentType = headers['content-type'];
 
-  if (contentType === 'multipart/form-data') {
-    return next();
+  if (contentType.startsWith('multipart/form-data')) {
+    parseMultipartFormData(req, () => {
+      return next();
+    });
   }
 
   if (contentType === 'application/json') {
