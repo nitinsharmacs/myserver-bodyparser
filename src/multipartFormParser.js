@@ -86,48 +86,11 @@ const groupBody = (bodyContents) => {
   return body;
 };
 
-const getBoundary = (headers) => {
-  const contentType = headers['content-type'];
+const parseMultipartFormData = (body, boundary) => {
+  const bodyContents = parseBody(body, boundary);
 
-  const [, boundaryString] = contentType.split(';');
-  const [, boundary] = boundaryString.trim().split('=');
-  return '--'.concat(boundary);
-};
+  return groupBody(bodyContents.map(parseBodyBlock));
 
-const getBody = (req, cb) => {
-  const { headers } = req;
-
-  if (!headers['content-length']) {
-    return cb(new Error('No content-length found'));
-  }
-
-  const contentSize = +headers['content-length'];
-
-  const bodyBuffer = Buffer.alloc(contentSize);
-  let dataIndex = 0;
-
-  req.on('data', (chunk) => {
-    bodyBuffer.fill(chunk, dataIndex);
-    dataIndex += chunk.length;
-  });
-
-  req.on('end', () => {
-    cb(null, bodyBuffer);
-  });
-};
-
-const parseMultipartFormData = (req, cb) => {
-  getBody(req, (err, body) => {
-    if (err) {
-      return cb(err);
-    }
-
-    const boundary = getBoundary(req.headers);
-    const bodyContents = parseBody(body, boundary);
-
-    req.body = groupBody(bodyContents.map(parseBodyBlock));
-    cb(null);
-  });
 };
 
 module.exports = parseMultipartFormData;
