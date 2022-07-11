@@ -53,12 +53,12 @@ const bodyParser = (req, res, next) => {
     }
 
     if (contentType === 'application/json') {
-      req.body = parseJsonBody(body);
+      req.body = parseJsonBody(body.toString());
       return next();
     }
 
     if (contentType === 'application/x-www-form-urlencoded') {
-      req.body = parseFormUrlEncodedBody(body);
+      req.body = parseFormUrlEncodedBody(body.toString());
 
       next();
     }
