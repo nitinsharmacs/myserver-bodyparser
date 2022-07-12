@@ -1,24 +1,32 @@
 const CRLFB = Buffer.from('\r\n');
 const CRLFBx2 = Buffer.from('\r\n\r\n');
 
-const refineHeaderValue = (value) => {
-  return value.trim().replaceAll('"', '');
+const HEADER_NAME_VALUE_DELIM = /:|=/;
+
+const refineHeaderValue = (value) => value.trim().replaceAll('"', '');
+
+const refineHeaderName = (name) => name.trim().toLowerCase();
+
+const unifyHeader = (rawHeader) => {
+  return rawHeader.split('\r\n').join(';');
 };
 
 const parseHeader = (rawHeader) => {
-  const headers = rawHeader.split('\r\n').join(';');
-  const _headers = headers.split(';');
+  const headers = unifyHeader(rawHeader).split(';');
 
   const parsedHeaders = {};
-  _headers.forEach(header => {
-    const [name, value] = header.split(/:|=/);
-    parsedHeaders[name.trim().toLowerCase()] = refineHeaderValue(value);
+
+  headers.forEach(header => {
+    const [name, value] = header.split(HEADER_NAME_VALUE_DELIM);
+    parsedHeaders[refineHeaderName(name)] = refineHeaderValue(value);
   });
+
   return parsedHeaders;
 };
 
 const parseBodyBlock = ({ rawHeader, rawValue }) => {
   const refinedHeader = rawHeader.toString().trim();
+
   return {
     headers: parseHeader(refinedHeader),
     value: rawValue
