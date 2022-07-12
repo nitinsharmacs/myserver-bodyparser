@@ -1,5 +1,5 @@
 const assert = require('assert');
-const parseFormUrlEncodedBody = require('../src/parseUrlEncoded.js');
+const parseFormUrlEncodedBody = require('../src/formUrlEncodedParser.js');
 
 describe('parseFormUrlEncodedBody', () => {
   it('should parse form url encoded body', () => {
