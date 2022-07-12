@@ -1,5 +1,5 @@
 const CRLFB = Buffer.from('\r\n');
-const TCRLFB = Buffer.from('\r\n\r\n');
+const CRLFBx2 = Buffer.from('\r\n\r\n');
 
 const refineHeaderValue = (value) => {
   return value.trim().replaceAll('"', '');
@@ -34,7 +34,7 @@ const parseBody = (reqBodyBuffer, boundary) => {
   const parsedBody = [];
 
   let boundaryPos = bodyBuffer.indexOf(boundaryBuffer);
-  let dataStartIndex = bodyBuffer.indexOf(TCRLFB);
+  let dataStartIndex = bodyBuffer.indexOf(CRLFBx2);
 
   while (dataStartIndex >= 0) {
     const rawHeader = bodyBuffer.slice(boundaryLength, dataStartIndex);
@@ -50,12 +50,12 @@ const parseBody = (reqBodyBuffer, boundary) => {
     }
 
     const rawValue = bodyBuffer.slice(
-      dataStartIndex + TCRLFB.length, boundaryPos - 2
+      dataStartIndex + CRLFBx2.length, boundaryPos - 2
     );
 
     bodyBuffer = bodyBuffer.slice(boundaryPos);
 
-    dataStartIndex = bodyBuffer.indexOf(TCRLFB);
+    dataStartIndex = bodyBuffer.indexOf(CRLFBx2);
 
     parsedBody.push({ rawHeader, rawValue });
   }
