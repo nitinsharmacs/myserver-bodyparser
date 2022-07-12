@@ -1,6 +1,6 @@
 const parseMultipartFormData = require('./src/multipartFormParser.js');
-const parseJsonBody = require("./src/parseJsonBody.js");
-const parseFormUrlEncodedBody = require("./src/parseUrlEncoded.js");
+const parseJsonBody = require("./src/jsonParser.js");
+const parseFormUrlEncodedBody = require("./src/formUrlEncodedParser.js");
 
 const loadBody = (req, cb) => {
   const { headers } = req;
